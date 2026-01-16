@@ -1,107 +1,155 @@
-# newincoming.
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Magical Flower Nursery</title>
-  <style>
-    :root{
-      --sakura:#f7c6d9;
-      --peach:#ffe5d4;
-      --lilac:#e6d9ff;
-      --butter:#fff4c2;
-      --glow: rgba(255,255,255,0.6);
-    }
+<meta charset="UTF-8" />
+<title>Bloom</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    *{box-sizing:border-box}
+<style>
+:root {
+  --bg: #050805;
+  --green: #0f2e1a;
+  --neon: #3cff8f;
+}
 
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family: 'Segoe UI', 'Poppins', sans-serif;
-      background: radial-gradient(circle at top, var(--butter), var(--peach), var(--sakura), var(--lilac));
-      overflow:hidden;
-      color:#6b4b5a;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .nursery{
-      position:relative;
-      width:100%;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
+body {
+  background: var(--bg);
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
 
-    .card{
-      background: rgba(255,255,255,0.45);
-      backdrop-filter: blur(14px);
-      border-radius:32px;
-      padding:48px 56px;
-      box-shadow: 0 20px 60px rgba(255,182,193,0.25);
-      text-align:center;
-      max-width:520px;
-      animation: float 6s ease-in-out infinite;
-    }
+.scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, #07150d 0%, #050805 60%);
+}
 
-    h1{
-      font-size:2.6rem;
-      margin:0 0 12px;
-      letter-spacing:1px;
-    }
+/* subtle cyber grid */
+.scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(60,255,143,0.04) 1px, transparent 1px),
+    linear-gradient(to top, rgba(60,255,143,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.15;
+}
 
-    p{
-      font-size:1.05rem;
-      line-height:1.7;
-      opacity:0.9;
-    }
+/* flower container */
+.flower {
+  position: absolute;
+  bottom: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: rise 22s linear infinite;
+}
 
-    .flowers{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-    }
+/* stem */
+.stem {
+  width: 4px;
+  height: 0;
+  background: linear-gradient(to top, var(--green), var(--neon));
+  margin: 0 auto;
+  animation: growStem 6s ease-out forwards;
+}
 
-    .flower{
-      position:absolute;
-      width:18px;
-      height:18px;
-      background: radial-gradient(circle, #fff, #ffd6e8);
-      border-radius:50%;
-      box-shadow: 0 0 12px var(--glow);
-      animation: sway 5s ease-in-out infinite, bloom 8s ease-in-out infinite;
-    }
+/* bloom */
+.bloom {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  margin: 0 auto;
+  transform: scale(0);
+  animation: bloom 6s ease-out forwards;
+  animation-delay: 2s;
+}
 
-    .flower::after{
-      content:'';
-      position:absolute;
-      inset:-6px;
-      border-radius:50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.8), transparent 70%);
-      opacity:0.6;
-    }
+.petal {
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  background: radial-gradient(circle at center, var(--neon), var(--green));
+  border-radius: 50% 50% 50% 50%;
+  transform-origin: bottom center;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 6px rgba(60,255,143,0.4));
+}
 
-    .petal{
-      position:absolute;
-      width:14px;
-      height:14px;
-      background: linear-gradient(145deg, #ffeaf3, #f7c6d9);
-      border-radius: 60% 40% 60% 40%;
-      opacity:0.6;
-      animation: fall 18s linear infinite;
-    }
+.petal:nth-child(1) { transform: rotate(0deg) translateY(-15px); }
+.petal:nth-child(2) { transform: rotate(60deg) translateY(-15px); }
+.petal:nth-child(3) { transform: rotate(120deg) translateY(-15px); }
+.petal:nth-child(4) { transform: rotate(180deg) translateY(-15px); }
+.petal:nth-child(5) { transform: rotate(240deg) translateY(-15px); }
+.petal:nth-child(6) { transform: rotate(300deg) translateY(-15px); }
 
-    @keyframes sway{
-      0%,100%{transform:translateX(0)}
-      50%{transform:translateX(8px)}
-    }
+/* animations */
+@keyframes rise {
+  from { bottom: -200px; }
+  to { bottom: 120vh; }
+}
 
-    @keyframes bloom{
-      0%,100%{transform:scale(0.6)}
-      50%{transform:scale(1)}
-    }
+@keyframes growStem {
+  from { height: 0; }
+  to { height: 160px; }
+}
 
-    @keyframes fall{
-      0%{transform:translateY(-10vh) rotate(0deg)}
-      100%{transform:translateY(110vh
+@keyframes bloom {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+/* soft breathing motion */
+.flower {
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* typography */
+.title {
+  position: absolute;
+  top: 12%;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  letter-spacing: 0.3em;
+  color: rgba(200,255,220,0.6);
+  opacity: 0;
+  animation: fadeIn 6s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+</style>
+</head>
+
+<body>
+<div class="scene">
+  <div class="title">BLOOM</div>
+
+  <div class="flower">
+    <div class="bloom">
+      <div class="petal"></div>
+      <div class="petal"></div>
+      <div class="petal"></div>
+      <div class="petal"></div>
+      <div class="petal"></div>
+      <div class="petal"></div>
+    </div>
+    <div class="stem"></div>
+  </div>
+</div>
+</body>
+</html>
